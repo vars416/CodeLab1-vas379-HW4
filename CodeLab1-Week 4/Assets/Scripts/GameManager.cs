@@ -49,6 +49,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public List<string> highScoreNames; //list of high score names
+    public List<float> highScoreNums;  //list of high score values
+
     private void Awake()
     {
         if (instance == null)
@@ -69,7 +72,7 @@ public class GameManager : MonoBehaviour
 
     public void TimerReset()
     {
-        instance.TimerText.enabled = true;
+        //instance.TimerText.enabled = true;
         instance.timer = 30;
         instance.TimerText.text = "Time: " + (int)timer;
     }
@@ -77,6 +80,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        highScoreNames = new List<string>(); //init highScoreNames
+        highScoreNums = new List<float>();  //init highScoreNums
+
         TimerText = GetComponentInChildren<Text>();
 
         if (File.Exists(Application.dataPath + FILE_HS)) //check if the file exists
@@ -98,5 +104,46 @@ public class GameManager : MonoBehaviour
             //SceneManager.LoadScene("LoseScreen");
             TimerText.text = "Game Over";
         }*/
+    }
+
+    public void UpdateHighScores()
+    {
+
+        bool newScore = false; //by default, we don't have new high score
+
+        for (int i = 0; i < highScoreNums.Count; i++)
+        { //go through all the high scores
+            if (highScoreNums[i] > instance.timer)
+            { //if we have a time that is lower than one of the high scores
+                highScoreNums.Insert(i, instance.timer); //insert this new score into the value list
+                highScoreNames.Insert(i, "VAR"); //give it the name "VAR"
+                print(highScoreNames);
+                newScore = true; //new high sccore
+                break; //stop the for loop
+            }
+        }
+
+        if (newScore)
+        { //if we have a new high score
+            highScoreNums.RemoveAt(highScoreNums.Count - 1); //remove the final high score value so we are back down to 10
+            highScoreNames.RemoveAt(10);
+        }
+
+        string fileContents = ""; //create a new string to insert into the file
+
+        for (int i = 0; i < highScoreNames.Count; i++)
+        { //loop through all the high scores
+            fileContents += highScoreNames[i] + " " + highScoreNums[i] + "\n"; //build a string for all the high scores in the lists
+        }
+
+        File.WriteAllText(Application.dataPath + FILE_HS, fileContents); //save the list to the file
+    }
+
+    //reset the important values when the game restarts
+    public void Reset()
+    {
+        instance.timer = 30;
+        /*score = 0;
+        PrizeScript.currentLevel = 0;*/
     }
 }
