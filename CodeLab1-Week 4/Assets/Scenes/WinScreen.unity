@@ -628,27 +628,32 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'High Score 1
+  m_Text: 'Your Score: 200
 
-    High Score 2
 
-    High Score 3
+    High Scores:
 
-    High Score 4
+    VAR 100
 
-    High
-    Score 5
+    VAR 110
 
-    High Score 6
+    VAR
+    120
 
-    High Score 7
+    VAR 130
 
-    High Score 8
+    VAR 140
 
-    High Score
-    9
+    VAR 150
 
-    High Score 10'
+    VAR 160
+
+    VAR 170
+
+    VAR
+    180
+
+    VAR 190'
 --- !u!222 &1195313141
 CanvasRenderer:
   m_ObjectHideFlags: 0

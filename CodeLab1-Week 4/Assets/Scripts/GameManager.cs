@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-        { //instance hasn't been set yet
+        {
             instance = this; //set instance to this object
             DontDestroyOnLoad(gameObject); //Dont Destroy this object when you load a new scene
         }
@@ -67,14 +67,14 @@ public class GameManager : MonoBehaviour
 
     public void changescene(string stringname)
     {
-        SceneManager.LoadScene(stringname);
+        SceneManager.LoadScene(stringname); //scene changer
     }
 
     public void TimerReset()
     {
         //instance.TimerText.enabled = true;
-        instance.timer = 30;
-        instance.TimerText.text = "Time: " + (int)timer;
+        instance.timer = 30; //reset to 30
+        instance.TimerText.text = "Time: " + (int)timer; //show timer
     }
 
     // Start is called before the first frame update
@@ -89,8 +89,25 @@ public class GameManager : MonoBehaviour
         {
             string hsString = File.ReadAllText(Application.dataPath + FILE_HS); //read the text from highscore file
             print(hsString); //print highscore
+            string[] scorePairs = hsString.Split('\n'); //split it on the newline, making each space in the array a line in the file
+
+            for (int i = 0; i < 10; i++)
+            { //loop through the 10 scores
+                string[] nameScores = scorePairs[i].Split(' '); //split each line on the space
+                highScoreNames.Add(nameScores[0]); //the first part of the split is the name
+                highScoreNums.Add(float.Parse(nameScores[1])); //the second part is the value
+            }
+        }
+        else //if the high score file doesn't exist
+        {
+            for (int i = 0; i < 10; i++) //create a new default high score list
+            {
+                highScoreNames.Add("VAR");
+                highScoreNums.Add(100 + i * 10);
+            }
         }
 
+        Debug.Log(Application.dataPath);
     }
 
     // Update is called once per frame
@@ -106,7 +123,7 @@ public class GameManager : MonoBehaviour
         }*/
     }
 
-    public void UpdateHighScores()
+    public void HighScoreUpdate()
     {
 
         bool newScore = false; //by default, we don't have new high score
@@ -117,7 +134,7 @@ public class GameManager : MonoBehaviour
             { //if we have a time that is lower than one of the high scores
                 highScoreNums.Insert(i, instance.timer); //insert this new score into the value list
                 highScoreNames.Insert(i, "VAR"); //give it the name "VAR"
-                print(highScoreNames);
+                print(highScoreNames); //print names
                 newScore = true; //new high sccore
                 break; //stop the for loop
             }
@@ -125,24 +142,24 @@ public class GameManager : MonoBehaviour
 
         if (newScore)
         { //if we have a new high score
-            highScoreNums.RemoveAt(highScoreNums.Count - 1); //remove the final high score value so we are back down to 10
+            highScoreNums.RemoveAt(highScoreNums.Count - 1); //stop high score from increasing more than 10
             highScoreNames.RemoveAt(10);
         }
 
-        string fileContents = ""; //create a new string to insert into the file
+        string HSString = " "; //create a new string to insert into the file
 
         for (int i = 0; i < highScoreNames.Count; i++)
-        { //loop through all the high scores
-            fileContents += highScoreNames[i] + " " + highScoreNums[i] + "\n"; //build a string for all the high scores in the lists
+        { //Go through all the high scores
+            HSString += highScoreNames[i] + "" + highScoreNums[i] + "\n"; //build a string for all the high scores in the lists
         }
 
-        File.WriteAllText(Application.dataPath + FILE_HS, fileContents); //save the list to the file
+        File.WriteAllText(Application.dataPath + FILE_HS, HSString); //save the list to the file
     }
 
     //reset the important values when the game restarts
     public void Reset()
     {
-        instance.timer = 30;
+        instance.timer = 30; //reset time to 30
         /*score = 0;
         PrizeScript.currentLevel = 0;*/
     }

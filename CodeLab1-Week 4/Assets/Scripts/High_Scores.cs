@@ -9,7 +9,7 @@ public class High_Scores : MonoBehaviour
     public Text highScoreText;
 
     string highScoreTemplate =
-        "Your Score: \n" +
+        "Score: \n" +
         "<score>\n\n" +
         "High Score:\n" +
         "<highScores>";
@@ -17,9 +17,9 @@ public class High_Scores : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.instance.UpdateHighScores(); //update high scores when you get to this screen
+        GameManager.instance.HighScoreUpdate(); //update high scores when you get to this screen
 
-        string displayText = highScoreTemplate.Replace("<score>", GameManager.instance.timer + ""); //replace <score? with the players time
+        string displayText = highScoreTemplate.Replace("<score>", GameManager.instance.timer + ""); //replace <score> with the players time
 
         string highScoreString = ""; //make a string for holding the high score text
 
@@ -41,10 +41,6 @@ public class High_Scores : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-/*        if (Input.GetKey(KeyCode.Space))
-        { //if you press space
-            GameManager.instance.Reset(); //reset the vars
-            SceneManager.LoadScene("SampleScene"); //restart the game
-        }*/
+
     }
 }
